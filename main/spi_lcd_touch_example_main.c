@@ -20,7 +20,7 @@
 #include "esp_log.h"
 #include "lvgl.h"
 #include "ui/ui.h"
-#include "driver/adc.h"
+#include "ui/screens.h"
 //#include "esp_adc_cal.h"
 
 #if CONFIG_EXAMPLE_LCD_CONTROLLER_ILI9341
@@ -71,20 +71,6 @@ static const char *TAG = "example";
 #define EXAMPLE_LVGL_TASK_MIN_DELAY_MS 1
 #define EXAMPLE_LVGL_TASK_STACK_SIZE   (4 * 1024)
 #define EXAMPLE_LVGL_TASK_PRIORITY     2
-
-void read_adc_voltage() {
-    adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(ADC1_CHANNEL_7, ADC_ATTEN_DB_11);
-
-    // esp_adc_cal_characteristics_t adc_chars;
-    // esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_12, DEFAULT_VREF, &adc_chars);
-
-    int raw_value = adc1_get_raw(ADC1_CHANNEL_7);
-    // uint32_t voltage = esp_adc_cal_raw_to_voltage(raw_value, &adc_chars);
-
-    ESP_LOGI(TAG, "Reading adc");
-    printf("ADC Value: %d, Voltage: %d mV\n", raw_value, raw_value);
-}
 
 
 // LVGL library is not thread-safe, this example will call LVGL APIs from different tasks, so use a mutex to protect it
@@ -171,16 +157,28 @@ static void example_increase_lvgl_tick(void *arg)
     lv_tick_inc(EXAMPLE_LVGL_TICK_PERIOD_MS);
 }
 
+// Timer callback to update the UI
+static void update_ui_timer_cb(lv_timer_t *timer)
+{
+    // Call tick_screen_main directly to update the UI
+    tick_screen_main();
+}
+
 static void example_lvgl_port_task(void *arg)
 {
     ESP_LOGI(TAG, "Starting LVGL task");
     uint32_t time_till_next_ms = 0;
     uint32_t time_threshold_ms = 1000 / CONFIG_FREERTOS_HZ;
+    
+    // Create a timer to update the UI every 100ms
+    lv_timer_t *update_timer = lv_timer_create(update_ui_timer_cb, 100, NULL);
+    
     while (1) {
         _lock_acquire(&lvgl_api_lock);
         time_till_next_ms = lv_timer_handler();
-        //ui_tick(); // Update the UI
+        // ui_tick() was causing crashes, so we use an LVGL timer instead
         _lock_release(&lvgl_api_lock);
+        
         // in case of triggering a task watch dog time out
         time_till_next_ms = MAX(time_till_next_ms, time_threshold_ms);
         usleep(1000 * time_till_next_ms);

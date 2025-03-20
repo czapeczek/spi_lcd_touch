@@ -9,6 +9,7 @@ extern "C" {
 
 typedef struct _objects_t {
     lv_obj_t *main;
+    lv_obj_t *volt;
     lv_obj_t *voltage;
 } objects_t;
 
