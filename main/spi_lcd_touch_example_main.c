@@ -171,7 +171,7 @@ static void example_lvgl_port_task(void *arg)
     uint32_t time_threshold_ms = 1000 / CONFIG_FREERTOS_HZ;
     
     // Create a timer to update the UI every 100ms
-    lv_timer_t *update_timer = lv_timer_create(update_ui_timer_cb, 100, NULL);
+    lv_timer_t *update_timer = lv_timer_create(update_ui_timer_cb, 10, NULL);
     
     while (1) {
         _lock_acquire(&lvgl_api_lock);
