@@ -1,0 +1,53 @@
+# Ignorowanie katalogów generowanych podczas kompilacji
+build/
+sdkconfig
+sdkconfig.old
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+config/
+
+# Ignorowanie binarek i plików obiektowych
+*.elf
+*.bin
+*.map
+*.hex
+*.out
+*.o
+*.d
+*.a
+*.lo
+*.lai
+*.la
+
+# Ignorowanie plików IDF
+.project/
+.cproject/
+.factory/
+*.pyc
+*.pyo
+__pycache__/
+esp-idf/
+
+# Ignorowanie logów i plików sesyjnych
+*.log
+*.swp
+*.swo
+*.swn
+.vscode/
+.idea/
+*.bak
+
+# Ignorowanie plików Python Virtual Env
+venv/
+.env/
+.mypy_cache/
+__pycache__/
+pip-wheel-metadata/
+
+# Ignorowanie plików flashowania i debugowania
+flash_project_args.sh
+gdbinit
+partition_table/
+managed_components/
