@@ -7,6 +7,9 @@
 extern "C" {
 #endif
 
+extern lv_obj_t* arcs[4];
+extern lv_obj_t* labels[4];
+
 typedef struct _objects_t {
     lv_obj_t *main;
     lv_obj_t *volt_0;
@@ -14,9 +17,9 @@ typedef struct _objects_t {
     lv_obj_t *volt_2;
     lv_obj_t *volt_3;
     lv_obj_t *p_0;
+    lv_obj_t *p_1;
     lv_obj_t *p_2;
     lv_obj_t *p_3;
-    lv_obj_t *p_4;
 } objects_t;
 
 extern objects_t objects;

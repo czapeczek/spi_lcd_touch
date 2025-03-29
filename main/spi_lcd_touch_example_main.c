@@ -79,6 +79,9 @@ const adc1_channel_t input_channels[] = {
     ADC1_CHANNEL_6,
 };
 
+volatile float adc_values[4] = {0};
+volatile char adc_labels[4][32] = {0};
+
 const size_t input_channel_count = sizeof(input_channels) / sizeof(input_channels[0]);
 
 
@@ -181,7 +184,8 @@ static void example_increase_lvgl_tick(void *arg)
 // Timer callback to update the UI
 static void update_ui_timer_cb(lv_timer_t *timer)
 {
-    // Call tick_screen_main directly to update the UI
+    // Note: This is called from within the LVGL task which already holds the mutex,
+    // so we don't need to acquire it again here
     tick_screen_main();
 }
 
@@ -206,8 +210,38 @@ static void example_lvgl_port_task(void *arg)
     }
 }
 
+void adc_task(void *pvParemeter) {
+    while(1) {
+        for(int channel = 0; channel < input_channel_count; channel++) {
+            int32_t voltage = adc1_get_raw(input_channels[channel]);     
+            float arc_value = voltage * 3.3 / 4095;
+            adc_values[channel] = arc_value;
+            char buffer[32];
+            sprintf((char*)adc_labels[channel], "%0.2f", arc_value);            // adc_labels[channel] = buffer;
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(20));  // 🔧 <– dodaj opóźnienie!
+    }
+}
+
+void main_screen_update_task() {
+    while(1) {
+        // Use the LVGL mutex to protect LVGL API calls
+        _lock_acquire(&lvgl_api_lock);
+        // Call the tick_screen_main function to update the UI
+        tick_screen_main();
+        _lock_release(&lvgl_api_lock);
+        
+        vTaskDelay(pdMS_TO_TICKS(30));
+    }
+}
+
+
 void app_main(void)
 {
+
+    init_adc();
+
     ESP_LOGI(TAG, "Turn off LCD backlight");
     gpio_config_t bk_gpio_config = {
         .mode = GPIO_MODE_OUTPUT,
@@ -346,8 +380,9 @@ void app_main(void)
 
 
     ESP_LOGI(TAG, "Create LVGL task");
-    xTaskCreate(example_lvgl_port_task, "LVGL", EXAMPLE_LVGL_TASK_STACK_SIZE, NULL, EXAMPLE_LVGL_TASK_PRIORITY, NULL);
-
+    xTaskCreatePinnedToCore(example_lvgl_port_task, "LVGL", EXAMPLE_LVGL_TASK_STACK_SIZE, NULL, 2, NULL, 1);
+    xTaskCreatePinnedToCore(adc_task, "ADC_READ", EXAMPLE_LVGL_TASK_STACK_SIZE, NULL, EXAMPLE_LVGL_TASK_PRIORITY, NULL, 0);
+    xTaskCreatePinnedToCore(main_screen_update_task, "SCREEN_UPDATE", EXAMPLE_LVGL_TASK_STACK_SIZE, NULL, 1, NULL, 1);
     ESP_LOGI(TAG, "Initialize UI");
     // Lock the mutex due to the LVGL APIs are not thread-safe
     _lock_acquire(&lvgl_api_lock);

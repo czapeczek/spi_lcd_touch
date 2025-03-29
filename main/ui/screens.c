@@ -8,13 +8,23 @@
 #include "styles.h"
 #include "ui.h"
 #include "driver/adc.h"
-
+#include "esp_err.h"
+#include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include <string.h>
 
 extern const adc1_channel_t input_channels[];
+extern const size_t input_channel_count;
+
+static const char *TAG = "screen1";
 
 objects_t objects;
 lv_obj_t *tick_value_change_obj;
+
+lv_obj_t* labels[] = { NULL };
+
+lv_obj_t* arcs[] = { NULL };
 
 void create_screen_main() {
     lv_obj_t *obj = lv_obj_create(0);
@@ -211,7 +221,7 @@ void create_screen_main() {
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
-            // p_2
+            // p_1
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.p_1 = obj;
             lv_obj_set_pos(obj, 264, 6);
@@ -222,7 +232,7 @@ void create_screen_main() {
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
-            // p_3
+            // p_2
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.p_2 = obj;
             lv_obj_set_pos(obj, 4, 204);
@@ -233,7 +243,7 @@ void create_screen_main() {
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
-            // p_4
+            // p_3
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.p_3 = obj;
             lv_obj_set_pos(obj, 264, 204);
@@ -245,38 +255,33 @@ void create_screen_main() {
         }
     }
     
+    labels[0] = objects.p_0;
+    labels[1] = objects.p_1;
+    labels[2] = objects.p_2;
+    labels[3] = objects.p_3;
+    
+    
+    arcs[0] = objects.volt_0;
+    arcs[1] = objects.volt_1;
+    arcs[2] = objects.volt_2;
+    arcs[3] = objects.volt_3;
+
     tick_screen_main();
 }
 
-int objects::* labels[] = {
-    &objects.p_0,
-    &objects.p_1,
-    &objects.p_2,
-    &objects.p_3
-}
-
-int objects::* arcs[] = {
-    &objects.volt_0,
-    &objects.volt_1,
-    &objects.volt_2,
-    &objects.volt_3
-}
-
-
 void tick_screen_main() {
+    extern volatile float adc_values[4];
+    extern volatile char adc_labels[4][32];
+    extern const adc1_channel_t input_channels[];
     
-    for(int channel = 0; channel < sizeof(input_channels) / sizeof(input_channels[0]); channel++) {
-
-        int32_t raw_value = adc1_get_raw(input_channels[channel]);     
-        float arc_value = voltage * 3.3 / 4095;
-        lv_arc_set_value(objects.volt_0, voltage);
-        char buffer[32];
-        snprintf(buffer, sizeof(buffer), "%0.2f", arc_value);
-        lv_label_set_text(objects.p_0, buffer);
-
+    for(int channel = 0; channel < 4; channel++) {
+        // Update the label with the text representation
+        lv_label_set_text(labels[channel], (char*)adc_labels[channel]);
+        
+        // Update the arc value with the raw ADC value
+        int32_t voltage = adc1_get_raw(input_channels[channel]);
+        lv_arc_set_value(arcs[channel], voltage);
     }
-
-
 }
 
 
