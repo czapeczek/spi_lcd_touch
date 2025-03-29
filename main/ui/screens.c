@@ -18,36 +18,228 @@ void create_screen_main() {
     lv_obj_t *obj = lv_obj_create(0);
     objects.main = obj;
     lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 240, 320);
+    lv_obj_set_size(obj, 320, 240);
     {
         lv_obj_t *parent_obj = obj;
         {
             lv_obj_t *obj = lv_scale_create(parent_obj);
-            lv_obj_set_pos(obj, 38, 35);
-            lv_obj_set_size(obj, 165, 164);
-            lv_scale_set_mode(obj, LV_SCALE_MODE_ROUND_OUTER);
-            lv_scale_set_range(obj, 0, 4);
-            lv_scale_set_total_tick_count(obj, 31);
+            lv_obj_set_pos(obj, 40, 0);
+            lv_obj_set_size(obj, 120, 127);
+            lv_scale_set_mode(obj, LV_SCALE_MODE_ROUND_INNER);
+            lv_scale_set_range(obj, 0, -50);
+            lv_scale_set_total_tick_count(obj, 26);
             lv_scale_set_major_tick_every(obj, 5);
             lv_scale_set_label_show(obj, true);
+            lv_obj_set_style_opa(obj, 200, LV_PART_ITEMS | LV_STATE_DEFAULT);
+            lv_obj_set_style_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_top(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_left(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_bottom(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_right(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    // volt_0
+                    lv_obj_t *obj = lv_arc_create(parent_obj);
+                    objects.volt_0 = obj;
+                    lv_obj_set_pos(obj, -10, -10);
+                    lv_obj_set_size(obj, 120, 127);
+                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_value(obj, 25);
+                    lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xffff00f0), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_top(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_bottom(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_left(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_right(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xfff7f7f7), LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
         }
         {
-            // volt
-            lv_obj_t *obj = lv_arc_create(parent_obj);
-            objects.volt = obj;
-            lv_obj_set_pos(obj, 45, 42);
-            lv_obj_set_size(obj, 150, 150);
-            lv_arc_set_range(obj, 0, 4095);
-            lv_arc_set_value(obj, 0);
-            lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
+            lv_obj_t *obj = lv_scale_create(parent_obj);
+            lv_obj_set_pos(obj, 160, 0);
+            lv_obj_set_size(obj, 120, 127);
+            lv_scale_set_mode(obj, LV_SCALE_MODE_ROUND_INNER);
+            lv_scale_set_range(obj, 0, -50);
+            lv_scale_set_total_tick_count(obj, 26);
+            lv_scale_set_major_tick_every(obj, 5);
+            lv_scale_set_label_show(obj, true);
+            lv_obj_set_style_opa(obj, 200, LV_PART_ITEMS | LV_STATE_DEFAULT);
+            lv_obj_set_style_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_top(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_left(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_bottom(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_right(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    // volt_1
+                    lv_obj_t *obj = lv_arc_create(parent_obj);
+                    objects.volt_1 = obj;
+                    lv_obj_set_pos(obj, -10, -10);
+                    lv_obj_set_size(obj, 120, 127);
+                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_value(obj, 25);
+                    lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xffff0303), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_top(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_bottom(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_left(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_right(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xfff7f7f7), LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
         }
         {
-            // voltage
+            lv_obj_t *obj = lv_scale_create(parent_obj);
+            lv_obj_set_pos(obj, 40, 113);
+            lv_obj_set_size(obj, 120, 127);
+            lv_scale_set_mode(obj, LV_SCALE_MODE_ROUND_INNER);
+            lv_scale_set_range(obj, 0, -50);
+            lv_scale_set_total_tick_count(obj, 26);
+            lv_scale_set_major_tick_every(obj, 5);
+            lv_scale_set_label_show(obj, true);
+            lv_obj_set_style_opa(obj, 200, LV_PART_ITEMS | LV_STATE_DEFAULT);
+            lv_obj_set_style_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_top(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_left(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_bottom(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_right(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    // volt_2
+                    lv_obj_t *obj = lv_arc_create(parent_obj);
+                    objects.volt_2 = obj;
+                    lv_obj_set_pos(obj, -10, -10);
+                    lv_obj_set_size(obj, 120, 127);
+                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_value(obj, 25);
+                    lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xff0dff1c), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_top(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_bottom(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_left(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_right(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xfff7f7f7), LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
+        }
+        {
+            lv_obj_t *obj = lv_scale_create(parent_obj);
+            lv_obj_set_pos(obj, 160, 113);
+            lv_obj_set_size(obj, 120, 127);
+            lv_scale_set_mode(obj, LV_SCALE_MODE_ROUND_INNER);
+            lv_scale_set_range(obj, 0, -50);
+            lv_scale_set_total_tick_count(obj, 26);
+            lv_scale_set_major_tick_every(obj, 5);
+            lv_scale_set_label_show(obj, true);
+            lv_obj_set_style_opa(obj, 200, LV_PART_ITEMS | LV_STATE_DEFAULT);
+            lv_obj_set_style_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_top(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_left(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_bottom(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_right(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    // volt_3
+                    lv_obj_t *obj = lv_arc_create(parent_obj);
+                    objects.volt_3 = obj;
+                    lv_obj_set_pos(obj, -10, -10);
+                    lv_obj_set_size(obj, 120, 127);
+                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_value(obj, 25);
+                    lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xff008eff), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_width(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_top(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_bottom(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_left(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_right(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_arc_color(obj, lv_color_hex(0xfff7f7f7), LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
+        }
+        {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.voltage = obj;
-            lv_obj_set_pos(obj, 80, 232);
+            lv_obj_set_pos(obj, 92, 39);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "1");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 208, 39);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "2");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 88, 152);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "3");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 206, 152);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "4");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_44, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            // p_0
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.p_0 = obj;
+            lv_obj_set_pos(obj, 1, 6);
+            lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
+            lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            // p_2
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.p_2 = obj;
+            lv_obj_set_pos(obj, 266, 6);
+            lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
+            lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
+            lv_label_set_text(obj, "Text");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            // p_3
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.p_3 = obj;
+            lv_obj_set_pos(obj, 2, 204);
+            lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
+            lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
+            lv_label_set_text(obj, "Text");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            // p_4
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.p_4 = obj;
+            lv_obj_set_pos(obj, 266, 204);
+            lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
+            lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
+            lv_label_set_text(obj, "Text");
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
     }
     
@@ -67,13 +259,13 @@ int32_t read_adc_voltage() {
 void tick_screen_main() {
     int32_t voltage = read_adc_voltage(); // Get ADC voltage value
 
-    lv_arc_set_value(objects.volt, voltage);
+    lv_arc_set_value(objects.volt_0, voltage);
     float arc_value = voltage * 3.3 / 4095;
 
     char buffer[32];
     snprintf(buffer, sizeof(buffer), "%0.2f V", arc_value);
 
-    lv_label_set_text(objects.voltage, buffer);
+    lv_label_set_text(objects.p_0, buffer);
 }
 
 

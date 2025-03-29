@@ -261,6 +261,7 @@ void app_main(void)
     void *buf2 = spi_bus_dma_memory_alloc(LCD_HOST, draw_buffer_sz, 0);
     assert(buf2);
     // initialize LVGL draw buffers
+    lv_display_set_rotation(display, LV_DISPLAY_ROTATION_90);
     lv_display_set_buffers(display, buf1, buf2, draw_buffer_sz, LV_DISPLAY_RENDER_MODE_PARTIAL);
     // associate the mipi panel handle to the display
     lv_display_set_user_data(display, panel_handle);
