@@ -21,7 +21,7 @@
 #include "lvgl.h"
 #include "ui/ui.h"
 #include "ui/screens.h"
-//#include "esp_adc_cal.h"
+#include "driver/adc.h"
 
 #if CONFIG_EXAMPLE_LCD_CONTROLLER_ILI9341
 #include "esp_lcd_ili9341.h"
@@ -69,8 +69,17 @@ static const char *TAG = "example";
 #define EXAMPLE_LVGL_TICK_PERIOD_MS    2
 #define EXAMPLE_LVGL_TASK_MAX_DELAY_MS 500
 #define EXAMPLE_LVGL_TASK_MIN_DELAY_MS 1
-#define EXAMPLE_LVGL_TASK_STACK_SIZE   (4 * 1024)
+#define EXAMPLE_LVGL_TASK_STACK_SIZE   (8 * 1024)
 #define EXAMPLE_LVGL_TASK_PRIORITY     2
+
+const adc1_channel_t input_channels[] = {
+    ADC1_CHANNEL_3,
+    ADC1_CHANNEL_4,
+    ADC1_CHANNEL_5,
+    ADC1_CHANNEL_6,
+};
+
+const size_t input_channel_count = sizeof(input_channels) / sizeof(input_channels[0]);
 
 
 // LVGL library is not thread-safe, this example will call LVGL APIs from different tasks, so use a mutex to protect it
@@ -150,6 +159,18 @@ static void example_lvgl_touch_cb(lv_indev_t * indev, lv_indev_data_t * data)
     }
 }
 #endif
+
+void init_adc()
+{
+    adc1_config_width(ADC_WIDTH_BIT_12);
+    
+    for(int channel = 0; channel < sizeof(input_channels) / sizeof(input_channels[0]); channel++) {
+        adc1_config_channel_atten(input_channels[channel], ADC_ATTEN_DB_0);
+        // adc1_config_channel_atten(input_channels[channel], ADC_ATTEN_DB_0);
+    }
+    
+
+}
 
 static void example_increase_lvgl_tick(void *arg)
 {

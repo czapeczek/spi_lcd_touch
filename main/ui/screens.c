@@ -11,6 +11,8 @@
 
 #include <string.h>
 
+extern const adc1_channel_t input_channels[];
+
 objects_t objects;
 lv_obj_t *tick_value_change_obj;
 
@@ -201,7 +203,7 @@ void create_screen_main() {
             // p_0
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.p_0 = obj;
-            lv_obj_set_pos(obj, 1, 6);
+            lv_obj_set_pos(obj, 3, 6);
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
@@ -211,8 +213,8 @@ void create_screen_main() {
         {
             // p_2
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.p_2 = obj;
-            lv_obj_set_pos(obj, 266, 6);
+            objects.p_1 = obj;
+            lv_obj_set_pos(obj, 264, 6);
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
@@ -222,8 +224,8 @@ void create_screen_main() {
         {
             // p_3
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.p_3 = obj;
-            lv_obj_set_pos(obj, 2, 204);
+            objects.p_2 = obj;
+            lv_obj_set_pos(obj, 4, 204);
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
@@ -233,8 +235,8 @@ void create_screen_main() {
         {
             // p_4
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.p_4 = obj;
-            lv_obj_set_pos(obj, 266, 204);
+            objects.p_3 = obj;
+            lv_obj_set_pos(obj, 264, 204);
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
@@ -246,26 +248,35 @@ void create_screen_main() {
     tick_screen_main();
 }
 
-int32_t read_adc_voltage() {
-    adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(ADC1_CHANNEL_7, ADC_ATTEN_DB_12);
+int objects::* labels[] = {
+    &objects.p_0,
+    &objects.p_1,
+    &objects.p_2,
+    &objects.p_3
+}
 
-    int raw_value = adc1_get_raw(ADC1_CHANNEL_7);
-
-     return raw_value;
+int objects::* arcs[] = {
+    &objects.volt_0,
+    &objects.volt_1,
+    &objects.volt_2,
+    &objects.volt_3
 }
 
 
 void tick_screen_main() {
-    int32_t voltage = read_adc_voltage(); // Get ADC voltage value
+    
+    for(int channel = 0; channel < sizeof(input_channels) / sizeof(input_channels[0]); channel++) {
 
-    lv_arc_set_value(objects.volt_0, voltage);
-    float arc_value = voltage * 3.3 / 4095;
+        int32_t raw_value = adc1_get_raw(input_channels[channel]);     
+        float arc_value = voltage * 3.3 / 4095;
+        lv_arc_set_value(objects.volt_0, voltage);
+        char buffer[32];
+        snprintf(buffer, sizeof(buffer), "%0.2f", arc_value);
+        lv_label_set_text(objects.p_0, buffer);
 
-    char buffer[32];
-    snprintf(buffer, sizeof(buffer), "%0.2f V", arc_value);
+    }
 
-    lv_label_set_text(objects.p_0, buffer);
+
 }
 
 
