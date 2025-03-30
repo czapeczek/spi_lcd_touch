@@ -13,6 +13,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include <string.h>
+#include <math.h>
+
 
 extern const adc1_channel_t input_channels[];
 extern const size_t input_channel_count;
@@ -56,7 +58,7 @@ void create_screen_main() {
                     objects.volt_0 = obj;
                     lv_obj_set_pos(obj, -10, -10);
                     lv_obj_set_size(obj, 120, 127);
-                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_range(obj, 0, 4095);
                     lv_arc_set_value(obj, 25);
                     lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
                     lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -93,7 +95,7 @@ void create_screen_main() {
                     objects.volt_1 = obj;
                     lv_obj_set_pos(obj, -10, -10);
                     lv_obj_set_size(obj, 120, 127);
-                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_range(obj, 0, 4095);
                     lv_arc_set_value(obj, 25);
                     lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
                     lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -130,7 +132,7 @@ void create_screen_main() {
                     objects.volt_2 = obj;
                     lv_obj_set_pos(obj, -10, -10);
                     lv_obj_set_size(obj, 120, 127);
-                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_range(obj, 0, 4095);
                     lv_arc_set_value(obj, 25);
                     lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
                     lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -167,7 +169,7 @@ void create_screen_main() {
                     objects.volt_3 = obj;
                     lv_obj_set_pos(obj, -10, -10);
                     lv_obj_set_size(obj, 120, 127);
-                    lv_arc_set_range(obj, 0, 4096);
+                    lv_arc_set_range(obj, 0, 4095);
                     lv_arc_set_value(obj, 25);
                     lv_obj_set_style_opa(obj, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
                     lv_obj_set_style_arc_width(obj, 5, LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -217,8 +219,8 @@ void create_screen_main() {
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
-            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
             // p_1
@@ -228,8 +230,8 @@ void create_screen_main() {
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
-            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
             // p_2
@@ -239,8 +241,8 @@ void create_screen_main() {
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
-            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
             // p_3
@@ -250,8 +252,8 @@ void create_screen_main() {
             lv_obj_set_size(obj, 51, LV_SIZE_CONTENT);
             lv_label_set_long_mode(obj, LV_LABEL_LONG_CLIP);
             lv_label_set_text(obj, "Text");
-            lv_obj_set_style_text_font(obj, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
         }
     }
     
@@ -269,13 +271,24 @@ void create_screen_main() {
     tick_screen_main();
 }
 
+float map_adc(int adc_val) {
+
+    const float in_min = 0.0f;
+    const float in_max = 4095.0f;
+    const float out_min = 0.0f;
+    const float out_max = -40.0f;
+
+    float result = ((adc_val - in_min) * (out_max - out_min) / (in_max - in_min)) + out_min;
+    return roundf(result * 10.0f) / 10.0f;
+}
+
 void tick_screen_main() {
     extern volatile float adc_values[4];
     extern volatile int32_t adc_raw_values[4];
     
     for(int channel = 0; channel < 4; channel++) {
         // Update the label with the text representation
-        lv_label_set_text_fmt(labels[channel], "%0.2f", adc_values[channel]);
+        lv_label_set_text_fmt(labels[channel], "%0.2f", map_adc(adc_raw_values[channel]));
         
         // Update the arc value with the cached raw ADC value
         lv_arc_set_value(arcs[channel], adc_raw_values[channel]);
