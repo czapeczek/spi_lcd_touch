@@ -65,7 +65,7 @@ static const char *TAG = "example";
 #define EXAMPLE_LCD_CMD_BITS           8
 #define EXAMPLE_LCD_PARAM_BITS         8
 
-#define EXAMPLE_LVGL_DRAW_BUF_LINES    20 // number of display lines in each draw buffer
+#define EXAMPLE_LVGL_DRAW_BUF_LINES    40 // number of display lines in each draw buffer - increased for better performance
 #define EXAMPLE_LVGL_TICK_PERIOD_MS    2
 #define EXAMPLE_LVGL_TASK_MAX_DELAY_MS 500
 #define EXAMPLE_LVGL_TASK_MIN_DELAY_MS 1
@@ -80,6 +80,7 @@ const adc1_channel_t input_channels[] = {
 };
 
 volatile float adc_values[4] = {0};
+volatile int32_t adc_raw_values[4] = {0};
 // volatile char adc_labels[4][32] = {0};
 
 const size_t input_channel_count = sizeof(input_channels) / sizeof(input_channels[0]);
@@ -195,8 +196,8 @@ static void example_lvgl_port_task(void *arg)
     uint32_t time_till_next_ms = 0;
     uint32_t time_threshold_ms = 1000 / CONFIG_FREERTOS_HZ;
     
-    // Create a timer to update the UI every 100ms
-    lv_timer_t *update_timer = lv_timer_create(update_ui_timer_cb, 10, NULL);
+    // Create a timer to update the UI every 33ms (30 FPS)
+    lv_timer_t *update_timer = lv_timer_create(update_ui_timer_cb, 33, NULL);
     
     while (1) {
         _lock_acquire(&lvgl_api_lock);
@@ -213,28 +214,17 @@ static void example_lvgl_port_task(void *arg)
 void adc_task(void *pvParemeter) {
     while(1) {
         for(int channel = 0; channel < input_channel_count; channel++) {
-            int32_t voltage = adc1_get_raw(input_channels[channel]);     
+            int32_t voltage = adc1_get_raw(input_channels[channel]);
+            adc_raw_values[channel] = voltage;     
             float arc_value = voltage * 3.3 / 4095;
             adc_values[channel] = arc_value;
-            char buffer[32];
-            //(char*)adc_labels[channel], "%0.2f", arc_value);            // adc_labels[channel] = buffer;
         }
 
-        vTaskDelay(pdMS_TO_TICKS(10));  // 🔧 <– dodaj opóźnienie!
+        vTaskDelay(pdMS_TO_TICKS(33));  // Match LVGL refresh rate (30 FPS)
     }
 }
 
-void main_screen_update_task() {
-    while(1) {
-        // Use the LVGL mutex to protect LVGL API calls
-        _lock_acquire(&lvgl_api_lock);
-        // Call the tick_screen_main function to update the UI
-        tick_screen_main();
-        _lock_release(&lvgl_api_lock);
-        
-        vTaskDelay(pdMS_TO_TICKS(20));
-    }
-}
+// This task is no longer needed as we're using LVGL's timer for UI updates
 
 
 void app_main(void)
@@ -382,7 +372,7 @@ void app_main(void)
     ESP_LOGI(TAG, "Create LVGL task");
     xTaskCreatePinnedToCore(example_lvgl_port_task, "LVGL", EXAMPLE_LVGL_TASK_STACK_SIZE, NULL, 2, NULL, 1);
     xTaskCreatePinnedToCore(adc_task, "ADC_READ", EXAMPLE_LVGL_TASK_STACK_SIZE, NULL, EXAMPLE_LVGL_TASK_PRIORITY, NULL, 0);
-    xTaskCreatePinnedToCore(main_screen_update_task, "SCREEN_UPDATE", EXAMPLE_LVGL_TASK_STACK_SIZE, NULL, 1, NULL, 1);
+    // Screen update is now handled by LVGL timer
     ESP_LOGI(TAG, "Initialize UI");
     // Lock the mutex due to the LVGL APIs are not thread-safe
     _lock_acquire(&lvgl_api_lock);
