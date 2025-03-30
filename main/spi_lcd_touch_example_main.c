@@ -41,7 +41,7 @@ static const char *TAG = "example";
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// Please update the following configuration according to your LCD spec //////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#define EXAMPLE_LCD_PIXEL_CLOCK_HZ     (20 * 1000 * 1000)
+#define EXAMPLE_LCD_PIXEL_CLOCK_HZ     (60 * 1000 * 1000)
 #define EXAMPLE_LCD_BK_LIGHT_ON_LEVEL  1
 #define EXAMPLE_LCD_BK_LIGHT_OFF_LEVEL !EXAMPLE_LCD_BK_LIGHT_ON_LEVEL
 #define EXAMPLE_PIN_NUM_SCLK           12
@@ -80,7 +80,7 @@ const adc1_channel_t input_channels[] = {
 };
 
 volatile float adc_values[4] = {0};
-volatile char adc_labels[4][32] = {0};
+// volatile char adc_labels[4][32] = {0};
 
 const size_t input_channel_count = sizeof(input_channels) / sizeof(input_channels[0]);
 
@@ -217,10 +217,10 @@ void adc_task(void *pvParemeter) {
             float arc_value = voltage * 3.3 / 4095;
             adc_values[channel] = arc_value;
             char buffer[32];
-            sprintf((char*)adc_labels[channel], "%0.2f", arc_value);            // adc_labels[channel] = buffer;
+            //(char*)adc_labels[channel], "%0.2f", arc_value);            // adc_labels[channel] = buffer;
         }
 
-        vTaskDelay(pdMS_TO_TICKS(20));  // 🔧 <– dodaj opóźnienie!
+        vTaskDelay(pdMS_TO_TICKS(10));  // 🔧 <– dodaj opóźnienie!
     }
 }
 
@@ -232,7 +232,7 @@ void main_screen_update_task() {
         tick_screen_main();
         _lock_release(&lvgl_api_lock);
         
-        vTaskDelay(pdMS_TO_TICKS(30));
+        vTaskDelay(pdMS_TO_TICKS(20));
     }
 }
 

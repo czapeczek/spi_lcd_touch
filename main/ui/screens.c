@@ -271,12 +271,12 @@ void create_screen_main() {
 
 void tick_screen_main() {
     extern volatile float adc_values[4];
-    extern volatile char adc_labels[4][32];
+    //extern volatile char adc_labels[4][32];
     extern const adc1_channel_t input_channels[];
     
     for(int channel = 0; channel < 4; channel++) {
         // Update the label with the text representation
-        lv_label_set_text(labels[channel], (char*)adc_labels[channel]);
+        lv_label_set_text_fmt(labels[channel], "%0.2f", adc_values[channel]);
         
         // Update the arc value with the raw ADC value
         int32_t voltage = adc1_get_raw(input_channels[channel]);
